@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /maps/nazareth {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasOnly(['sectors','version','updatedAt'])
+        && request.resource.data.sectors is map
+        && request.resource.data.version is int;
+      allow delete: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
