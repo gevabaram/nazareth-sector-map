@@ -30,11 +30,5 @@ jobs:
           test -n "$FIREBASE_SERVICE_ACCOUNT" || (echo "Missing FIREBASE_SERVICE_ACCOUNT" && exit 1)
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/firebase-service-account.json" >> "$GITHUB_ENV"
-      - name: Configure editor secret
-        env:
-          EDITOR_CODE: ${{ secrets.EDITOR_CODE }}
-        run: |
-          test -n "$EDITOR_CODE" || (echo "Missing EDITOR_CODE" && exit 1)
-          printf '%s' "$EDITOR_CODE" | firebase functions:secrets:set EDITOR_CODE --project polygon-app-e7c11 --force
       - name: Deploy Firestore rules and backend
         run: firebase deploy --only firestore:rules,functions:publishPolygons --project polygon-app-e7c11 --non-interactive
