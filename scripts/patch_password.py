@@ -11,28 +11,27 @@ if '@media(max-width:640px)' not in s:
     raise SystemExit('CSS insertion point not found')
 s = s.replace('@media(max-width:640px)', css + '@media(max-width:640px)', 1)
 
-modal = '<div id="passwordModal" class="passwordModal" aria-hidden="true"><div class="passwordCard"><div class="passwordTitle">הזן סיסמה</div><div class="passwordHint">העריכה, השינוי והמחיקה מוגנים בסיסמה.</div><input id="passwordInput" class="passwordInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="••"><div id="passwordError" class="passwordError"></div><div class="passwordActions"><button id="passwordCancel" class="passwordBtn cancel">ביטול</button><button id="passwordSubmit" class="passwordBtn ok">אישור</button></div></div></div>\n'
+modal = '<div id="passwordModal" class="passwordModal" aria-hidden="true"><div class="passwordCard"><div class="passwordTitle">הזן סיסמה</div><div class="passwordHint">עריכה, שינוי ומחיקה של פוליגונים מוגנים בסיסמה.</div><input id="passwordInput" class="passwordInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="••"><div id="passwordError" class="passwordError"></div><div class="passwordActions"><button id="passwordCancel" class="passwordBtn cancel">ביטול</button><button id="passwordSubmit" class="passwordBtn ok">אישור</button></div></div></div>\n'
 if '<section class="statusCard">' not in s:
     raise SystemExit('Modal insertion point not found')
 s = s.replace('<section class="statusCard">', modal + '<section class="statusCard">', 1)
 
 gate = """
+function openEditor(){toast('מצב עריכת הפוליגונים נפתח')}
 function requestEditorPassword(){menuStack.classList.remove('open');passwordError.textContent='';passwordInput.value='';passwordModal.classList.add('open');passwordModal.setAttribute('aria-hidden','false');setTimeout(()=>passwordInput.focus(),80)}
 function closePassword(){passwordModal.classList.remove('open');passwordModal.setAttribute('aria-hidden','true');passwordInput.value='';passwordError.textContent=''}
 function submitPassword(){if(passwordInput.value==='66'){closePassword();openEditor()}else{passwordError.textContent='סיסמה שגויה';passwordInput.select();if(navigator.vibrate)navigator.vibrate(80)}}
 passwordSubmit.onclick=submitPassword;passwordCancel.onclick=closePassword;passwordInput.addEventListener('keydown',e=>{if(e.key==='Enter')submitPassword();if(e.key==='Escape')closePassword()});passwordModal.addEventListener('click',e=>{if(e.target===passwordModal)closePassword()});
 """
-anchor = "hub.onclick=()=>menuStack.classList.toggle('open');"
+anchor = 'function toast(t)'
 if anchor not in s:
     raise SystemExit('JS insertion point not found')
 s = s.replace(anchor, gate + '\n' + anchor, 1)
 
-if 'editPoly.onclick=openEditor;' in s:
-    s = s.replace('editPoly.onclick=openEditor;', 'editPoly.onclick=requestEditorPassword;', 1)
-elif 'editPoly.onclick=()=>openEditor()' in s:
-    s = s.replace('editPoly.onclick=()=>openEditor()', 'editPoly.onclick=requestEditorPassword', 1)
-else:
+old = "editPoly.onclick=()=>toast('עורך הפוליגונים כולל בחירת גזרה, מברשת ומחק');"
+if old not in s:
     raise SystemExit('editPoly click handler not found')
+s = s.replace(old, 'editPoly.onclick=requestEditorPassword;', 1)
 
 p.write_text(s, encoding='utf-8')
 print('Password protection applied')
