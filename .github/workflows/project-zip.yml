@@ -1,0 +1,27 @@
+name: Build Project ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/project-zip.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zip-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create ZIP
+        run: |
+          zip -r nazareth-sector-map-full-project.zip . -x '.git/*' 'nazareth-sector-map-full-project.zip'
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nazareth-sector-map-full-project
+          path: nazareth-sector-map-full-project.zip
+          if-no-files-found: error
+          retention-days: 7
