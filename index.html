@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>מפת גזרות – נצרת והסביבה</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">מג</div>
+        <div>
+          <div class="title">מפת גזרות</div>
+          <div class="subtitle">נצרת • ריינה • יפיע • עילוט</div>
+        </div>
+      </div>
+      <button id="menuBtn" class="icon-btn" aria-label="תפריט"><span>☰</span></button>
+    </header>
+
+    <main class="map-shell">
+      <div id="map"></div>
+      <div class="map-actions">
+        <button id="locateBtn" class="fab primary" title="המיקום שלי" aria-label="המיקום שלי">◎</button>
+        <button id="followBtn" class="fab" title="עקוב אחרי" aria-label="עקוב אחרי">➤</button>
+        <button id="fitBtn" class="fab" title="הצג את כל הגזרות" aria-label="הצג את כל הגזרות">⌗</button>
+        <button id="layerBtn" class="fab" title="החלף מפה" aria-label="החלף מפה">▧</button>
+      </div>
+      <div class="legend-chip"><span class="draft-dot"></span>גבולות משוערים לפי צילום הייחוס</div>
+      <section id="statusCard" class="status-card">
+        <div id="sectorBadge" class="sector-badge neutral">—</div>
+        <div class="status-copy">
+          <div id="statusTitle" class="status-title">ממתין למיקום</div>
+          <div id="statusMeta" class="status-meta">הפעל GPS כדי לזהות את הגזרה</div>
+        </div>
+        <button id="shareBtn" class="share-btn" disabled><span class="share-icon">↗</span><span>שתף מיקום</span></button>
+      </section>
+    </main>
+
+    <aside id="drawer" class="drawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div><div class="drawer-title">גזרות ופעולות</div><div class="drawer-sub">ניהול שכבות, גבולות ו-GPS</div></div>
+        <button id="closeDrawerBtn" class="icon-btn small" aria-label="סגירה">✕</button>
+      </div>
+      <div class="drawer-section"><h3>מקרא</h3><div id="legendList" class="legend-list"></div></div>
+      <div class="drawer-section">
+        <h3>כלים</h3>
+        <div class="tool-grid">
+          <button id="drawerLocateBtn" class="tool-btn">◎<span>המיקום שלי</span></button>
+          <button id="drawerFitBtn" class="tool-btn">⌗<span>כל הגזרות</span></button>
+          <button id="drawerShareBtn" class="tool-btn">↗<span>שתף</span></button>
+          <button id="editBtn" class="tool-btn">✎<span>עריכת גבולות</span></button>
+        </div>
+      </div>
+      <div class="drawer-section edit-panel" id="editPanel" hidden>
+        <h3>עריכת גבולות</h3>
+        <p>השינויים נשמרים במכשיר בלבד. לדיוק מבצעי יש לכייל מול מקור GIS מוסמך.</p>
+        <div class="stack">
+          <select id="editSectorSelect" class="input"></select>
+          <button id="saveLocalBtn" class="wide-btn">שמור במכשיר</button>
+          <button id="resetBtn" class="wide-btn ghost">אפס לגבולות המקוריים</button>
+          <button id="exportBtn" class="wide-btn ghost">ייצא GeoJSON</button>
+          <label class="wide-btn ghost file-label">ייבא GeoJSON<input id="importInput" type="file" accept=".json,.geojson,application/geo+json" hidden></label>
+        </div>
+      </div>
+      <div class="drawer-section"><h3>פרטיות</h3><p class="privacy">המיקום מעובד רק בדפדפן. האפליקציה אינה שומרת היסטוריית מיקומים ואינה שולחת מיקום לשרת.</p></div>
+    </aside>
+    <div id="backdrop" class="backdrop" hidden></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="./app.js"></script>
+</body>
+</html>
