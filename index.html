@@ -45,4 +45,9 @@ passwordSubmit.onclick=submitPassword;passwordCancel.onclick=closePassword;passw
 
 function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),2200)}hub.onclick=()=>{menuStack.classList.toggle('open');sectorPicker.classList.remove('open')};showLocTop.onclick=showMe;shareTop.onclick=share;layer.onclick=toggleLayer;fit.onclick=openPicker;editPoly.onclick=requestEditorPassword;close.onclick=()=>{drawer.classList.remove('open');back.hidden=true};back.onclick=()=>{drawer.classList.remove('open');back.hidden=true};draw();applyVisibility();startGPS();setInterval(updateStatus,1000);
 </script>
+
+<script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore-compat.js"></script>
+<script src="./firebase-config.js"></script>
+<script src="./firebase-sync.js"></script>
 </body></html>
